@@ -1,0 +1,9 @@
+.seat-option { 
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.seat-option input[type="checkbox"]:checked + label {
+    font-weight: bold;
+    color: green;
+}

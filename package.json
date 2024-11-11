@@ -3,5 +3,8 @@
         "setup": "cd frontend && npm install && cd ../backend && npm install",
         "dev-frontend": "cd frontend && npm run dev",
         "dev-backend": "cd backend && npm run dev"
+    },
+    "dependencies": {
+        "react-router-dom": "^6.28.0"
     }
 }

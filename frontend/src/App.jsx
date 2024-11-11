@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from '/pages/Home';
+
 import MovieCard from './assets/components/MovieCard';
 import ShowCard from './assets/components/ShowCard';
 import Modal from './assets/components/Modal';
@@ -128,6 +131,13 @@ function App() {
 
   return (
     <>
+
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Router>
+
       {/* header */}
       <header>
         <h1>Goldies Cinema</h1>
@@ -137,7 +147,7 @@ function App() {
 
       {/* visa bokningsmeddelandet om det finns */}
       {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
-      
+
 
       {/* visa alla movies från api */}
       <div className="movie-container">

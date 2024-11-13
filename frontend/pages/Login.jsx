@@ -5,13 +5,13 @@ function Login() {
     function handleLogin() {
         
 
-        event.preventDefault(); // Förhindrar att sidan uppdateras
+        event.preventDefault(); // förhindrar att sidan uppdateras
 
-        // Hämta värdena från formulärfälten
+        // hämta värdena från formulärfälten
         const email = event.target.email.value;
         const password = event.target.password.value;
 
-        // Logga de inskickade värdena
+        // logga de inskickade värdena
         console.log("Inskickad e-post:", email);
         console.log("Inskickat lösenord:", password);
 

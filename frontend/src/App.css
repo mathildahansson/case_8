@@ -71,11 +71,6 @@ p {
 }
 
 
-/* BEHÅLLARE FÖR FILM */
-.movie-container {
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 1rem;
-}
 
 .movie-card {
   background-color: #ffffff;

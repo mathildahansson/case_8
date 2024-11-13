@@ -1,29 +1,39 @@
-.movies-list {
+  /* BEHÅLLARE FÖR FILM */
+  .movie-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+  }
+
+  .movies-list {
     max-width: 100%;
     margin: 2rem;
     display: flex;
     gap: 1.5rem;
-    overflow-x: auto; /* aktiverar horisontell scroll */
-    scroll-behavior: smooth; /* gör scrollningen mjuk */
+    overflow-x: auto;
+    /* aktiverar horisontell scroll */
+    scroll-behavior: smooth;
+    /* gör scrollningen mjuk */
   }
-  
+
   .movie-card {
-    flex: 0 0 auto; /* gör så att korten inte krymper eller bryts till ny rad */
+    flex: 0 0 auto;
+    /* gör så att korten inte krymper eller bryts till ny rad */
     width: 300px;
-    padding: 1rem;
+    padding: 0rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 1);;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 1);
     border-radius: 3px;
-    position: relative; /* krävs för att hover-effekten ska fungera */
+    position: relative;
+    /* krävs för att hover-effekten ska fungera */
   }
-  
+
   .movie-image {
     width: 100%;
     height: auto;
     display: block;
   }
-  
+
   #movies {
     background-color: transparent;
     font-size: 32px;
@@ -31,12 +41,11 @@
     padding: 0rem;
     text-align: center;
   }
-  
+
   #h3-hover-title {
-  text-align: center;
+    text-align: center;
   }
-  
-  
+
   /* hover-effekt för att visa titel över bilden */
   .movie-title-hover {
     position: absolute;
@@ -48,16 +57,16 @@
     color: #f1f1f1;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
-  
+
   .movie-card:hover .movie-title-hover {
     opacity: 1;
   }
-  
+
   /* BOKA KNAPP */
   .btn-book {
     margin: 1.5rem 1rem 1rem 1rem;
@@ -69,7 +78,7 @@
     font-weight: 600;
     cursor: pointer;
   }
-  
+
   .btn-book:hover {
     background: linear-gradient(to right, #aea761, #60564a);
   }

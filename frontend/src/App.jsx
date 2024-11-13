@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink, useLocation } from "react-router-dom";
 
 import Home from '/pages/Home';
 import Login from '/pages/Login';
 
-import MovieCard from './assets/components/MovieCard';
+// import MovieCard from './assets/components/MovieCard';
 import ShowCard from './assets/components/ShowCard';
 import Modal from './assets/components/Modal';
 import BookingForm from './assets/components/BookingForm';
+import Header from './assets/components/Header';
+import Footer from './assets/components/Footer';
+
 import './App.css'
+import MovieContainer from './assets/components/MovieContainer';
 
 
 function App() {
@@ -19,7 +23,6 @@ function App() {
   const [selectedShows, setSelectedShows] = useState([]); // hanterar vilken "show" som är vald för bokning
   const [bookingMessage, setBookingMessage] = useState(''); // state för bokningsmeddelande
   const [selectedShow, setSelectedShow] = useState(null); // state för vald show
-
 
 
   // fetch - movies
@@ -97,7 +100,6 @@ function App() {
         };
         setSelectedShow(updatedShow);
         setBookingMessage(`Bokningen lyckades! Email: ${bookingData.email}, Tider: ${new Date(updatedShow.startTime).toLocaleString()} - ${new Date(updatedShow.endTime).toLocaleString()}, Totalt pris: ${bookingData.totalPrice} kr.`);
-
         // Stäng modalen om du vill
         closeModal();
       })
@@ -137,10 +139,10 @@ function App() {
 
       {/* hanterar olika sidor - pages */}
       <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<Home />}></Route>
-            <Route path='/login' element={<Login />}></Route>
-          </Routes>
+        <Routes>
+          <Route path='/' element={<Home />}></Route>
+          <Route path='/login' element={<Login />}></Route>
+        </Routes>
 
         <nav>
           <ul>
@@ -153,34 +155,15 @@ function App() {
 
 
       {/* header */}
-      <header>
-        <h1>Goldies Cinema</h1>
-        <hr />
-        <p id='head-description'>Välkommen till nostalgiernas biograf!</p>
-      </header>
+      <Header />
+
 
       {/* visa bokningsmeddelandet om det finns */}
       {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
 
 
       {/* visa alla movies från api */}
-      <div className="movie-container">
-        <h2 id='movies'>Aktuella filmer:</h2>
-        <div className="movies-list">
-
-          {movies.map(movie => (
-            <MovieCard
-              key={movie._id}
-              title={movie.title}
-              description={movie.description}
-              releaseDate={movie.releaseDate}
-              posterUrl={movie.posterUrl}
-              genre={movie.genre}
-              onBook={() => openModal(movie._id)} // öppna modal med filmens id
-            />
-          ))}
-        </div>
-      </div>
+    <MovieContainer movies={movies} openModal={openModal}/>
 
 
       {/* modal för att visa bokningsinformation */}
@@ -241,9 +224,7 @@ function App() {
 
 
       {/* footer */}
-      <footer>
-        <h3>&copy; Mathilda Hansson 2024</h3>
-      </footer>
+      <Footer />
     </>
   );
 }

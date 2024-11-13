@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+
 import Home from '/pages/Home';
+import Login from '/pages/Login';
 
 import MovieCard from './assets/components/MovieCard';
 import ShowCard from './assets/components/ShowCard';
@@ -129,14 +131,26 @@ function App() {
   };
 
 
+
   return (
     <>
 
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Router>
+      {/* hanterar olika sidor - pages */}
+      <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home />}></Route>
+            <Route path='/login' element={<Login />}></Route>
+          </Routes>
+
+        <nav>
+          <ul>
+            <li><NavLink to='/'>Home</NavLink></li>
+            <li><NavLink to='/login'>Login</NavLink></li>
+
+          </ul>
+        </nav>
+      </BrowserRouter>
+
 
       {/* header */}
       <header>

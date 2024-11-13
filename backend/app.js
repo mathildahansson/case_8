@@ -3,9 +3,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import moviesRouter from './routes/movies.js';
-import showsRouter from './routes/shows.js';
-import bookingsRouter from './routes/bookings.js';
+
+// lokala dependencies
+import siteRouter from './routes/siteRouter.js';
 
 dotenv.config();
 
@@ -18,9 +18,12 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch((error) => console.error("MongoDB connection error:", error));
 
 // routes
-app.use('/api/v1/movies', moviesRouter);
-app.use('/api/v1/shows', showsRouter);
-app.use('/api/v1/bookings', bookingsRouter);
+// app.use('/api/v1/movies', moviesRouter);
+// app.use('/api/v1/shows', showsRouter);
+// app.use('/api/v1/bookings', bookingsRouter);
+
+app.use(siteRouter);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

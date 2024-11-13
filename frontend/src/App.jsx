@@ -38,7 +38,6 @@ function App() {
       });
   }, []);
 
-
   // fetch - shows
   useEffect(() => {
     fetch('https://cinema-api.henrybergstrom.com/api/v1/shows')
@@ -58,12 +57,10 @@ function App() {
     return shows.filter(show => show.movie._id === movieId).length;
   };
 
-
   // hämta alla shows för en specifik film
   const getShowsForMovie = (movieId) => {
     return shows.filter(show => show.movie._id === movieId);
   };
-
 
   // hantera bokningsdata
   const handleBookingSubmit = (bookingData) => {
@@ -100,7 +97,7 @@ function App() {
         };
         setSelectedShow(updatedShow);
         setBookingMessage(`Bokningen lyckades! Email: ${bookingData.email}, Tider: ${new Date(updatedShow.startTime).toLocaleString()} - ${new Date(updatedShow.endTime).toLocaleString()}, Totalt pris: ${bookingData.totalPrice} kr.`);
-        // Stäng modalen om du vill
+        // stäng modalen om du vill
         closeModal();
       })
       .catch(error => {
@@ -114,7 +111,6 @@ function App() {
     setSelectedShow(show); // uppdatera med den valda föreställningen
   };
 
-
   // funktion - öppna modalen och visa alla shows för en film
   const openModal = (movieId) => {
     const showsForMovie = getShowsForMovie(movieId); // hämta alla shows för filmen
@@ -124,7 +120,6 @@ function App() {
     setBookingMessage(''); // rensa bokningsmeddelande när modalen öppnas
   };
 
-
   // funktion - stänga modalen
   const closeModal = () => {
     setIsModalOpen(false);
@@ -133,10 +128,8 @@ function App() {
   };
 
 
-
   return (
     <>
-
       {/* hanterar olika sidor - pages */}
       <BrowserRouter>
         <Routes>
@@ -144,6 +137,7 @@ function App() {
           <Route path='/login' element={<Login />}></Route>
         </Routes>
 
+        {/* navigering */}
         <nav>
           <ul>
             <li><NavLink to='/'>Home</NavLink></li>
@@ -163,7 +157,7 @@ function App() {
 
 
       {/* visa alla movies från api */}
-    <MovieContainer movies={movies} openModal={openModal}/>
+      <MovieContainer movies={movies} openModal={openModal} />
 
 
       {/* modal för att visa bokningsinformation */}
@@ -219,7 +213,6 @@ function App() {
             </div>
           </div>
         )}
-
       </Modal>
 
 

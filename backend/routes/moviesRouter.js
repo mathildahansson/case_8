@@ -14,7 +14,7 @@ router.get('/import', async (req, res) => {
     // extrahera filmerna från svar
     const movies = response.data;
 
-    // spara varje film i  MongoDB-databas
+    // spara varje film i MongoDB-databas
     // Movie.insertMany() kan användas för att spara flera filmer på en gång
     const savedMovies = await Movie.insertMany(movies);
 

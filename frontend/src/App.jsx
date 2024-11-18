@@ -18,6 +18,7 @@ import Footer from './assets/components/Footer';
 import './App.css'
 
 
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);

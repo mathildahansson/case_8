@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, NavLink, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// import pages
 import Home from '/pages/Home';
 import Login from '/pages/Login';
 
-// import MovieCard from './assets/components/MovieCard';
+// import components
+import MovieContainer from './assets/components/MovieContainer';
 import ShowCard from './assets/components/ShowCard';
 import Modal from './assets/components/Modal';
 import BookingForm from './assets/components/BookingForm';
 import Header from './assets/components/Header';
 import Footer from './assets/components/Footer';
+// import MovieCard from './assets/components/MovieCard';
 
+// import CSS
 import './App.css'
-import MovieContainer from './assets/components/MovieContainer';
 
 
 function App() {
@@ -136,21 +139,10 @@ function App() {
           <Route path='/' element={<Home />}></Route>
           <Route path='/login' element={<Login />}></Route>
         </Routes>
-
-        {/* navigering */}
-        <nav>
-          <ul>
-            <li><NavLink to='/'>Home</NavLink></li>
-            <li><NavLink to='/login'>Login</NavLink></li>
-
-          </ul>
-        </nav>
       </BrowserRouter>
-
 
       {/* header */}
       <Header />
-
 
       {/* visa bokningsmeddelandet om det finns */}
       {bookingMessage && <p className="booking-message">{bookingMessage}</p>}

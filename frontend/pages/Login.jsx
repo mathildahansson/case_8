@@ -16,7 +16,7 @@ function Login() {
         console.log("Inskickat lösenord:", password);
 
         
-        fetch('http://localhost:80/login')
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/login`)
             .then((response) => response.text())
             .then((data) => {
                 console.log("data:", data)
@@ -44,7 +44,7 @@ function Login() {
                 <br />
                 <br />
 
-                <button type="submit" onSubmit={handleLogin}>Logga in</button>
+                <button type="submit">Logga in</button>
 
                 <button type="reset">Reset</button>
             </form>

@@ -5,7 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 // lokala dependencies
-import siteRouter from './routes/siteRouter.js';
+// import siteRouter from './routes/siteRouter.js';
 
 dotenv.config();
 
@@ -14,6 +14,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+// kontrollera miljövariabler
+if (!process.env.MONGODB_URI) {
+  console.error("MONGODB_URI is not defined in .env");
+  process.exit(1);
+}
 
 // MongoDB anslutning med felhantering
 mongoose.connect(process.env.MONGODB_URI, {

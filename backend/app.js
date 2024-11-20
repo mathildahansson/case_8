@@ -7,8 +7,9 @@ import axios from 'axios'; // för att göra http-förfrågningar
 
 // lokala dependencies
 import siteRouter from './routes/siteRouter.js';
-import moviesRouter from './routes/moviesRouter.js'; // importera moviesRouter
+import moviesRouter from './routes/moviesRouter.js';
 import bookingsRouter from './routes/bookingsRouter.js'; 
+import showsRouter from './routes/showsRouter.js';
 
 
 
@@ -37,7 +38,9 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // routes 
 app.use('/api/v1/movies', moviesRouter); // movie-endpoints med /api/v1/movies
-app.use('/api/v1/bookings', bookingsRouter); // movie-endpoints med /api/v1/movies
+app.use('/api/v1/bookings', bookingsRouter); // booking-endpoints med /api/v1/bookings
+app.use('/api/v1/shows', showsRouter); // show-endpoints med /api/v1/shows
+
 
 app.use(siteRouter);
 

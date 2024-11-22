@@ -70,6 +70,9 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
         return <p>Inga platser tillgängliga för denna föreställning.</p>;
     }
 
+    // beräkna totalpris med säkerhetskontroll
+    const totalPrice = selectedSeats.length * (selectedShow.pricePerSeat || 0);
+
     return (
         <form onSubmit={handleSubmit}>
             <label>
@@ -98,7 +101,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
 
 
             {/* totalprisberäkning och visning */}
-            <p><strong>Totalpris:</strong> {selectedSeats.length * selectedShow.pricePerSeat} kr</p>
+            <p><strong>Totalpris:</strong> {totalPrice} kr</p>
 
 
             <button type="submit">Boka</button>

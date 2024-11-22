@@ -78,34 +78,64 @@ function App() {
       headers: {
         'Content-Type': 'application/json',
       },
+      //   body: JSON.stringify({
+      //     ...bookingData,
+      //     show: {
+      //       _id: selectedShow._id,
+      //       startTime: selectedShow.startTime,
+      //       endTime: selectedShow.endTime,
+      //       pricePerSeat: selectedShow.pricePerSeat,
+      //       roomNumber: selectedShow.roomNumber,
+      //     },
+      //   }),
+      // })
+      // ----------
       body: JSON.stringify({
-        ...bookingData,
-        show: {
-          _id: selectedShow._id,
-          startTime: selectedShow.startTime,
-          endTime: selectedShow.endTime,
-          pricePerSeat: selectedShow.pricePerSeat,
-          roomNumber: selectedShow.roomNumber,
-        },
+        email: bookingData.email,
+        seats: bookingData.seats,
+        show: selectedShow._id, // skicka bara show-ID
+        totalPrice: bookingData.totalPrice,
+        bookingTime: bookingData.bookingTime,
       }),
     })
-      .then(response => response.json())
+      // -----------
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Misslyckades med att skapa bokning');
+        }
+        return response.json();
+      })
       .then(data => {
         console.log('Bokningen lyckades:', data);
         setBookings(prevBookings => [...prevBookings, data]);
 
+
+        // uppdatera 'selectedShow' för att återspegla nya bokade platser
         const updatedShow = {
           ...selectedShow,
-          availableSeats: selectedShow.availableSeats.filter(seat => !bookingData.seats.includes(seat)),
+          availableSeats: selectedShow.availableSeats.filter(
+            (seat) => !bookingData.seats.includes(seat)
+          ),
           bookedSeats: [...selectedShow.bookedSeats, ...bookingData.seats],
         };
+        // ---------
+        // const updatedShow = {
+        //   ...selectedShow,
+        //   availableSeats: selectedShow.availableSeats.filter(seat => !bookingData.seats.includes(seat)),
+        //   bookedSeats: [...selectedShow.bookedSeats, ...bookingData.seats],
+        // };
+        // ----------
         setSelectedShow(updatedShow);
+
+        
         setBookingMessage(`Bokningen lyckades! Email: ${bookingData.email}, Tider: ${new Date(updatedShow.startTime).toLocaleString()} - ${new Date(updatedShow.endTime).toLocaleString()}, Totalt pris: ${bookingData.totalPrice} kr.`);
         // stäng modalen om du vill
         closeModal();
       })
       .catch(error => {
         console.error('Fel vid bokning:', error);
+        alert("Ett fel inträffade vid bokningen. Försök igen.");
+
       });
   };
 

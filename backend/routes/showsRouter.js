@@ -1,6 +1,6 @@
 import express from 'express';
 import axios from 'axios'; // för att göra HTTP-förfrågningar
-import Show from '../models/Show.js'; 
+import Show from '../models/Show.js';
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/import', async (req, res) => {
   try {
     // hämta shows från externt API
-    const response = await axios.get('https://cinema-api.henrybergstrom.com/api/v1/shows'); 
+    const response = await axios.get('https://cinema-api.henrybergstrom.com/api/v1/shows');
 
     // kontrollera om data finns
     if (!response.data || response.data.length === 0) {

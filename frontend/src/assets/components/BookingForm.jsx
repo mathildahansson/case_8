@@ -7,6 +7,8 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
 
     console.log(selectedShow); // logga för felsök
 
+    
+
     const handleSeatChange = (seat) => {
         setSelectedSeats(prevSelected => {
             if (prevSelected.includes(seat)) {
@@ -24,6 +26,8 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
             return;
         }
 
+        
+
         const bookingData = {
             email,
             show: {
@@ -34,7 +38,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                 roomNumber: selectedShow.roomNumber,
             },
             seats: selectedSeats,
-            bookingTime: new Date().toISOString(),
+            bookingTime: new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' }),
             totalPrice: selectedSeats.length * selectedShow.pricePerSeat,
         };
 

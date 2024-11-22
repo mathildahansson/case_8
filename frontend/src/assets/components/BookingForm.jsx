@@ -7,7 +7,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
 
     console.log(selectedShow); // logga för felsök
 
-    
+
 
     const handleSeatChange = (seat) => {
         setSelectedSeats(prevSelected => {
@@ -19,14 +19,12 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (selectedSeats.length === 0) {
             alert('Vänligen välj minst en plats.'); // meddelande om inga platser valda
             return;
         }
-
-        
 
         const bookingData = {
             email,
@@ -38,13 +36,34 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                 roomNumber: selectedShow.roomNumber,
             },
             seats: selectedSeats,
-            bookingTime: new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' }),
+            bookingTime: new Date().toLocaleString(),
             totalPrice: selectedSeats.length * selectedShow.pricePerSeat,
         };
 
-        onSubmit(bookingData); // skicka bokningsdata till föräldern
-    };
+        try {
+            const response = await fetch('http://localhost:3000/api/v1/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bookingData),
+            });
 
+            if (!response.ok) {
+                throw new Error(`Fel vid bokning: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            alert('Bokning lyckades!');
+            setEmail('');
+            setSelectedSeats([]);
+            console.log('Bokningsresultat:', result);
+        } catch (error) {
+            console.error('Kunde inte skicka bokningen:', error);
+            alert('Något gick fel, vänligen försök igen.');
+        }
+        // onSubmit(bookingData); // skicka bokningsdata till föräldern
+    };
 
     // kontrollera om selectedShow finns och har tillgängliga platser
     if (!selectedShow || !Array.isArray(selectedShow.availableSeats) || selectedShow.availableSeats.length === 0) {

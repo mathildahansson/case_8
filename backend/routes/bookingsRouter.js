@@ -26,7 +26,7 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // skapa ny bokning
     const booking = new Booking({
-      email,
+      email: req.user.email || email, // använder email från token om möjligt
       seats,
       show,
       totalPrice,

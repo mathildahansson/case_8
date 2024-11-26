@@ -30,7 +30,7 @@ router.post('/', authenticateToken, async (req, res) => {
       seats,
       show,
       totalPrice,
-      bookingTime: bookingTime ? new Date(bookingTime) : undefined, // standardvärde om tid inte anges
+      bookingTime: bookingTime ? new Date(bookingTime) : new Date(), // använd nuvarande tid som standard
     });
 
     // spara i databasen
@@ -50,8 +50,12 @@ router.get('/', authenticateToken, async (req, res) => {
   try {
     const bookings = await Booking.find();
 
-    if (bookings.length === 0) {
-      return res.status(404).json({ message: 'Inga bokningar hittades.' });
+    // filtrera bokningar baserat på användarens email
+    const userBookings = await Booking.find({ email: req.user.email });
+
+
+    if (userBookings.length === 0) {
+      return res.status(404).json({ message: 'Inga bokningar hittades för användaren.' });
     }
 
     res.status(200).json(bookings);

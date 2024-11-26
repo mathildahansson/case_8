@@ -1,10 +1,11 @@
 import express from 'express';
 import Booking from '../models/Booking.js';
+import authenticateToken from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // POST - skapa ny bokning
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const { email, seats, show, totalPrice, bookingTime } = req.body;
 

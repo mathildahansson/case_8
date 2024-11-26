@@ -4,7 +4,7 @@ import { Router } from 'express';
 const siteRouter = Router();
 
 siteRouter.get('/', (req, res) => {
-    res.send("Hello world... My name is Mathilda!");
+    res.send("Hello world, backend is running!");
 });
 
 siteRouter.get('/home', (req, res) => {

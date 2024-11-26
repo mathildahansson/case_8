@@ -10,6 +10,8 @@ import siteRouter from './routes/siteRouter.js';
 import moviesRouter from './routes/moviesRouter.js';
 import bookingsRouter from './routes/bookingsRouter.js'; 
 import showsRouter from './routes/showsRouter.js';
+import authRouter from './routes/authRouter.js';
+
 
 
 
@@ -40,6 +42,8 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/v1/movies', moviesRouter); // movie-endpoints med /api/v1/movies
 app.use('/api/v1/bookings', bookingsRouter); // booking-endpoints med /api/v1/bookings
 app.use('/api/v1/shows', showsRouter); // show-endpoints med /api/v1/shows
+app.use('/api/v1/auth', authRouter);
+
 
 
 app.use(siteRouter);

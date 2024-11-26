@@ -45,6 +45,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // token hämtas från localStorage
                 },
                 body: JSON.stringify(bookingData),
             });

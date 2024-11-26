@@ -76,6 +76,17 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit}>
+
+            <label>
+                Namn:
+                <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                />
+            </label>
+
             <label>
                 E-post:
                 <input

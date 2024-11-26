@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// import pages
-import Home from '/pages/Home';
-import Login from '/pages/Login';
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // import components
 import MovieContainer from './assets/components/MovieContainer';
@@ -16,8 +12,6 @@ import Footer from './assets/components/Footer';
 
 // import CSS
 import './App.css'
-
-
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -164,13 +158,12 @@ function App() {
 
   return (
     <>
-      {/* hanterar olika sidor - pages */}
+      {/* hanterar olika sidor - pages
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home />}></Route>
-          <Route path='/login' element={<Login />}></Route>
+          <Route path='/' element={<App />}></Route>
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
 
       {/* header */}
       <Header />

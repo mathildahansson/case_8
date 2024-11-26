@@ -4,7 +4,6 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     console.log('Authorization Header:', authHeader); // loggning
 
-
     // kontrollera att authorization-headern finns
     if (!authHeader) {
         return res.status(401).json({

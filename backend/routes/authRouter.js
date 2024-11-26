@@ -1,9 +1,15 @@
 import express from 'express';
-import { loginUser } from '../controllers/authController.js';
+import { generateToken } from '../controllers/authController.js';
 
 const router = express.Router();
 
-// post/login - anropa loginUser från authController
-router.post('/login', loginUser);
+router.post('/token', (req, res) => {
+  const { name, email } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Namn och e-post krävs.' });
+  }
+  const token = generateToken({ name, email });
+  res.status(200).json({ token });
+});
 
 export default router;

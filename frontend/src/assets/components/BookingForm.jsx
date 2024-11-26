@@ -1,22 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './BookingForm.css';
 
 function BookingForm({ bookings, selectedShow, onSubmit }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [availableSeats, setAvailableSeats] = useState(selectedShow.availableSeats || []);
+
+    useEffect(() => {
+        // uppdatera tillgängliga platser om selectedShow ändras
+        setAvailableSeats(selectedShow.availableSeats || []);
+    }, [selectedShow]);
 
     console.log(selectedShow); // logga för felsök
 
 
 
     const handleSeatChange = (seat) => {
-        setSelectedSeats(prevSelected => {
-            if (prevSelected.includes(seat)) {
-                return prevSelected.filter(s => s !== seat); // avmarkera plats
-            } else {
-                return [...prevSelected, seat]; // markera plats
-            }
+        setSelectedSeats((prevSelected) => {
+            const updatedSeats = prevSelected.includes(seat)
+                ? prevSelected.filter((s) => s !== seat)
+                : [...prevSelected, seat];
+            console.log('Uppdaterade platser:', updatedSeats); // logga uppdateringen
+            return updatedSeats;
         });
     };
 
@@ -68,6 +74,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
             }
 
             alert('Bokning lyckades!');
+            setAvailableSeats((prevSeats) => prevSeats.filter((seat) => !selectedSeats.includes(seat))); // ta bort bokade platser
             setName('');
             setEmail('');
             setSelectedSeats([]);
@@ -112,7 +119,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
 
             <div>
                 <p><strong>Välj platser:</strong></p>
-                {selectedShow.availableSeats.map((seat) => (
+                {availableSeats.map((seat) => (
                     <label key={seat} className="seat-option">
                         <input
                             type="checkbox"
@@ -122,6 +129,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                         {seat}
                     </label>
                 ))}
+
             </div>
 
 

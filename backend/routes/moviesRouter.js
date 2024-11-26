@@ -2,7 +2,6 @@ import express from 'express';
 import Movie from '../models/Movie.js';
 import axios from 'axios'; // för att göra http-förfrågningar
 
-
 const router = express.Router();
 
 // GET - få alla filmer från externt api och spara i databasen

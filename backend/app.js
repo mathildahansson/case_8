@@ -8,15 +8,11 @@ import dotenv from 'dotenv';
 // lokala dependencies
 import siteRouter from './routes/siteRouter.js';
 import moviesRouter from './routes/moviesRouter.js';
-import bookingsRouter from './routes/bookingsRouter.js'; 
+import bookingsRouter from './routes/bookingsRouter.js';
 import showsRouter from './routes/showsRouter.js';
 import authRouter from './routes/authRouter.js';
 
-
-
-
 dotenv.config();
-
 
 const app = express();
 app.use(cors());
@@ -28,6 +24,7 @@ if (!process.env.MONGODB_URI) {
   console.error("MONGODB_URI is not defined in .env");
   process.exit(1);
 }
+
 
 // MongoDB anslutning med felhantering
 mongoose.connect(process.env.MONGODB_URI)
@@ -44,10 +41,8 @@ app.use('/api/v1/bookings', bookingsRouter); // booking-endpoints med /api/v1/bo
 app.use('/api/v1/shows', showsRouter); // show-endpoints med /api/v1/shows
 app.use('/api/v1/auth', authRouter);
 
-
-
 app.use(siteRouter);
 
-
+// port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

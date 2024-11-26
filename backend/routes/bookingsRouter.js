@@ -7,11 +7,11 @@ const router = express.Router();
 // POST - skapa ny bokning
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    const { email, seats, show, totalPrice, bookingTime } = req.body;
+    const { name, email, seats, show, totalPrice, bookingTime } = req.body;
 
     // validering av obligatoriska fält
-    if (!email || !seats || !show || !totalPrice) {
-      return res.status(400).json({ error: 'Alla fält (email, seats, show, totalPrice) är obligatoriska!' });
+    if (!name || !email || !seats || !show || !totalPrice) {
+      return res.status(400).json({ error: 'Alla fält (name, email, seats, show, totalPrice) är obligatoriska!' });
     }
 
     if (!Array.isArray(seats) || seats.length === 0) { // kontrollera att 'seats' är en array
@@ -26,6 +26,7 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // skapa ny bokning
     const booking = new Booking({
+      name,
       email: req.user.email || email, // använder email från token om möjligt
       seats,
       show,
@@ -48,7 +49,7 @@ router.post('/', authenticateToken, async (req, res) => {
 // GET - hämta alla bokningar från databasen
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const bookings = await Booking.find();
+    // const bookings = await Booking.find();
 
     // filtrera bokningar baserat på användarens email
     const userBookings = await Booking.find({ email: req.user.email });
@@ -58,7 +59,7 @@ router.get('/', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: 'Inga bokningar hittades för användaren.' });
     }
 
-    res.status(200).json(bookings);
+    res.status(200).json(userBookings);
   } catch (error) {
     console.error('Fel vid hämtning av bokningar:', error.message);
     res.status(500).json({ error: 'Kunde inte hämta bokningar.' });
@@ -74,7 +75,17 @@ router.get('/import', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Inga bokningar hittades i det externa API:et.' });
     }
 
-    const savedBookings = await Booking.insertMany(response.data);
+
+    // Lägg till ett obligatoriskt name-fält om det saknas
+    const bookingsWithNames = response.data.map((booking) => {
+      if (!booking.name) {
+        // Om `name` saknas, generera ett standardvärde
+        booking.name = `Anonym användare (${booking.email || 'Okänd email'})`;
+      }
+      return booking;
+    });
+
+    const savedBookings = await Booking.insertMany(bookingsWithNames);
     res.status(200).json({
       message: 'Bokningar importerades!',
       bookings: savedBookings,

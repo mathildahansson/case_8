@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import axios from 'axios'; // för att göra http-förfrågningar
+// import axios from 'axios'; // för att göra http-förfrågningar
 
 // lokala dependencies
 import siteRouter from './routes/siteRouter.js';

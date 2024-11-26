@@ -14,6 +14,11 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Alla fält (email, seats, show, totalPrice) är obligatoriska!' });
     }
 
+    if (!Array.isArray(seats) || seats.length === 0) { // kontrollera att 'seats' är en array
+      return res.status(400).json({ error: 'Seats måste vara en array med innehåll.' });
+    }
+
+
     // skapa ny bokning
     const booking = new Booking({
       email,
@@ -36,7 +41,7 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 // GET - hämta alla bokningar från databasen
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const bookings = await Booking.find();
 
@@ -52,7 +57,7 @@ router.get('/', async (req, res) => {
 });
 
 // separera /import för extern API-import
-router.get('/import', async (req, res) => {
+router.get('/import', authenticateToken, async (req, res) => {
   try {
     const response = await axios.get('https://cinema-api.henrybergstrom.com/api/v1/bookings');
 

@@ -5,7 +5,7 @@ dotenv.config();
 
 // mockad "databas" – du kan senare byta till en riktig databas
 const users = [
-  { id: 1, username: 'username123', password: 'password123' },
+  { id: 1, username: 'username123', password: 'password123', email: 'user123@example.com' },
 ];
 
 // logga in användare och generera jwt-token
@@ -26,7 +26,7 @@ export const loginUser = (req, res) => {
 
   // skapa jwt-token
   const token = jwt.sign(
-    { id: user.id, username: user.username },
+    { id: user.id, email: user.email  },
     process.env.JWT_SECRET, // hemlig nyckel från miljövariabler
     { expiresIn: '1h' } // token giltig i 1 timme
   );

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './BookingForm.css';
 
 function BookingForm({ bookings, selectedShow, onSubmit }) {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -26,7 +27,10 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
             return;
         }
 
+
+
         const bookingData = {
+            name,
             email,
             show: {
                 _id: selectedShow._id, // skicka hela show-objektet för att få mer information
@@ -41,11 +45,12 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
         };
 
         try {
+            console.log('Skickar bokningsdata:', bookingData);
+
             const response = await fetch('http://localhost:3000/api/v1/bookings', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // token hämtas från localStorage
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(bookingData),
             });
@@ -54,11 +59,19 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                 throw new Error(`Fel vid bokning: ${response.statusText}`);
             }
 
-            const result = await response.json();
+            const data = await response.json();
+
+            // spara token som returneras av backend
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                console.log('Token sparad:', data.token);
+            }
+
             alert('Bokning lyckades!');
+            setName('');
             setEmail('');
             setSelectedSeats([]);
-            console.log('Bokningsresultat:', result);
+            console.log('Bokningsresultat:', data);
         } catch (error) {
             console.error('Kunde inte skicka bokningen:', error);
             alert('Något gick fel, vänligen försök igen.');

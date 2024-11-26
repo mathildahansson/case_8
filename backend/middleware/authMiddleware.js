@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
+    console.log('Authorization Header:', authHeader); // loggning
+
 
     // kontrollera att authorization-headern finns
     if (!authHeader) {
@@ -10,8 +12,8 @@ const authenticateToken = (req, res, next) => {
         });
     }
 
-    // token finns i "authorization"-headern (Bearer TOKEN)
-    const token = authHeader && authHeader.split(' ')[1];
+    // förvänta bearer TOKEN
+    const token = authHeader.split(' ')[1];
 
     if (!token) return res.status(401).json({ error: 'Access token required...' });
 

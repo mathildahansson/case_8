@@ -1,11 +1,12 @@
 import express from 'express';
 import Booking from '../models/Booking.js';
 import authenticateToken from '../middleware/authMiddleware.js';
+import jwt from 'jsonwebtoken'; // För att generera JWT
 
 const router = express.Router();
 
 // POST - skapa ny bokning
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { name, email, seats, show, totalPrice, bookingTime } = req.body;
 
@@ -27,44 +28,77 @@ router.post('/', authenticateToken, async (req, res) => {
     // skapa ny bokning
     const booking = new Booking({
       name,
-      email: req.user.email || email, // använder email från token om möjligt
+      email,
       seats,
       show,
       totalPrice,
       bookingTime: bookingTime ? new Date(bookingTime) : new Date(), // använd nuvarande tid som standard
     });
 
+    
+
     // spara i databasen
     const savedBooking = await booking.save();
     console.log('Ny bokning skapad:', savedBooking);
 
-    // returnera bokningen
-    res.status(201).json(savedBooking);
+
+    // generera jtw-token baserat på namn och e-post
+    const token = jwt.sign(
+      { name, email }, // payload
+      process.env.JWT_SECRET, // hemlig nyckel
+      { expiresIn: '1h' } // token giltig i 1 timme
+    );
+
+    // returnera bokningen och token
+    res.status(201).json({
+      message: 'Bokning lyckades!',
+      booking: savedBooking,
+      token, // returnera token
+    });
+
+
   } catch (error) {
     console.error('Fel vid skapande av bokning:', error.message);
     res.status(500).json({ error: 'Kunde inte skapa bokningen.' });
   }
 });
 
-// GET - hämta alla bokningar från databasen
-router.get('/', authenticateToken, async (req, res) => {
+// GET - hämta alla bokningar för en användare
+router.get('/', async (req, res) => {
   try {
-    // const bookings = await Booking.find();
-
-    // filtrera bokningar baserat på användarens email
-    const userBookings = await Booking.find({ email: req.user.email });
-
-
-    if (userBookings.length === 0) {
-      return res.status(404).json({ message: 'Inga bokningar hittades för användaren.' });
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Authorization header saknas.' });
     }
 
-    res.status(200).json(userBookings);
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'Access token krävs.' });
+    }
+
+    // verifiera jtw-token
+    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: 'Ogiltig eller utgången token...' });
+      }
+
+      // hämta användarens bokningar baserat på e-post
+      const userBookings = await Booking.find({ email: user.email });
+      if (userBookings.length === 0) {
+        return res.status(404).json({ message: 'Inga bokningar hittades för användaren.' });
+      }
+
+      res.status(200).json(userBookings);
+    });
   } catch (error) {
     console.error('Fel vid hämtning av bokningar:', error.message);
     res.status(500).json({ error: 'Kunde inte hämta bokningar.' });
   }
 });
+
+
+
+
 
 // separera /import för extern API-import
 router.get('/import', authenticateToken, async (req, res) => {

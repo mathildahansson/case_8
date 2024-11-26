@@ -18,6 +18,11 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Seats måste vara en array med innehåll.' });
     }
 
+    if (isNaN(totalPrice) || totalPrice <= 0) { // kontrollera att 'totalPrice' är ett positivt nummer
+      return res.status(400).json({ error: 'totalPrice måste vara ett positivt nummer.' });
+    }
+
+
 
     // skapa ny bokning
     const booking = new Booking({

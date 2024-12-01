@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import Booking from '../models/Booking.js';
-import axios from 'axios'; 
 
 // POST - skapa ny bokning
 export const createBooking = async (req, res) => {
@@ -86,33 +85,5 @@ export const createBooking = async (req, res) => {
       res.status(500).json({ error: 'Kunde inte hämta bokningar.' });
     }
   };
-  
-  // separera /import för extern API-import
-  export const importBookings = async (req, res) => {
-    try {
-      const response = await axios.get('https://cinema-api.henrybergstrom.com/api/v1/bookings');
-  
-      if (!response.data || response.data.length === 0) {
-        return res.status(404).json({ error: 'Inga bokningar hittades i det externa API:et.' });
-      }
-  
-      // Lägg till ett obligatoriskt name-fält om det saknas
-      const bookingsWithNames = response.data.map((booking) => {
-        if (!booking.name) {
-          // Om `name` saknas, generera ett standardvärde
-          booking.name = `Anonym användare (${booking.email || 'Okänd email'})`;
-        }
-        return booking;
-      });
-  
-      const savedBookings = await Booking.insertMany(bookingsWithNames);
-      res.status(200).json({
-        message: 'Bokningar importerades!',
-        bookings: savedBookings,
-      });
-    } catch (error) {
-      console.error('Fel vid importering av bokningar:', error.message);
-      res.status(500).json({ error: 'Kunde inte importera bokningar.' });
-    }
-  };
+
 

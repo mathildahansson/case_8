@@ -43,6 +43,11 @@ export const createBooking = async (req, res) => {
       bookingTime: bookingTime ? new Date(bookingTime) : new Date(), // använd nuvarande tid som standard
     });
 
+    // uppdatera showens platser
+    existingShow.availableSeats = existingShow.availableSeats.filter(seat => !seats.includes(seat));
+    existingShow.bookedSeats = [...existingShow.bookedSeats, ...seats];
+    await existingShow.save(); // spara uppdaterade show-detaljerna
+
     // spara i databasen
     const savedBooking = await booking.save();
     console.log('Ny bokning skapad:', savedBooking);

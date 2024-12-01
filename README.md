@@ -22,7 +22,11 @@ Innan du börjar- se till att du har följande installerat på din dator:
 
 Om projektet finns på ett Git-repository, klona det med följande kommando:
 ```
-git clone <url-till-repository>
+git clone https://github.com/mathildahansson/case_8.git
+cd case_8
+```
+Observera: Döper du mappen till något annat än "case_8" behöver du istället hänvisa till denna genom:
+```
 cd <projektmapp>
 ```
 

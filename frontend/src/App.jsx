@@ -136,6 +136,13 @@ function App() {
   // funktion - öppna modalen och visa alla shows för en film
   const openModal = (movieId) => {
     const showsForMovie = getShowsForMovie(movieId); // hämta alla shows för filmen
+
+    // säkerställer att inte openmodal crashar vid retur av tom array
+    if (showsForMovie.length === 0) {
+      console.error(`Inga föreställningar hittades för film med ID: ${movieId}`);
+      return;
+    }
+
     setSelectedShows(showsForMovie); // spara dem i state
     setSelectedShow(null); // rensa tidigare vald show
     setIsModalOpen(true);

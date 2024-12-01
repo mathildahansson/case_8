@@ -1,5 +1,4 @@
 import express from 'express';
-import axios from 'axios'; // för att göra HTTP-förfrågningar
 import Show from '../models/Show.js';
 
 const router = express.Router();

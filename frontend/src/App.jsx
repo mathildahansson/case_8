@@ -25,7 +25,7 @@ function App() {
 
   // fetch - movies
   useEffect(() => {
-    fetch('https://cinema-api.henrybergstrom.com/api/v1/movies')
+    fetch('http://localhost:3000/api/v1/movies')
       .then(response => response.json())
       .then(data => {
         console.log(data); // logga data för att se om en film har ett unikt id
@@ -38,7 +38,7 @@ function App() {
 
   // fetch - shows
   useEffect(() => {
-    fetch('https://cinema-api.henrybergstrom.com/api/v1/shows')
+    fetch('http://localhost:3000/api/v1/shows')
       .then(response => response.json())
       .then(data => {
         console.log('Shows:', data); // logga shows
@@ -67,7 +67,7 @@ function App() {
       return;
     }
 
-    fetch('https://cinema-api.henrybergstrom.com/api/v1/bookings', {
+    fetch('http://localhost:3000/api/v1/bookings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

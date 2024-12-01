@@ -73,7 +73,7 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                 console.log('Token sparad:', data.token);
             }
 
-            alert('Bokning lyckades!');
+            // alert('Bokning lyckades!');
             setAvailableSeats((prevSeats) => prevSeats.filter((seat) => !selectedSeats.includes(seat))); // ta bort bokade platser
             setName('');
             setEmail('');

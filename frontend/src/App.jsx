@@ -72,18 +72,7 @@ function App() {
       headers: {
         'Content-Type': 'application/json',
       },
-      //   body: JSON.stringify({
-      //     ...bookingData,
-      //     show: {
-      //       _id: selectedShow._id,
-      //       startTime: selectedShow.startTime,
-      //       endTime: selectedShow.endTime,
-      //       pricePerSeat: selectedShow.pricePerSeat,
-      //       roomNumber: selectedShow.roomNumber,
-      //     },
-      //   }),
-      // })
-      // ----------
+
       body: JSON.stringify({
         email: bookingData.email,
         seats: bookingData.seats,
@@ -92,7 +81,6 @@ function App() {
         bookingTime: bookingData.bookingTime,
       }),
     })
-      // -----------
       .then((response) => {
         if (!response.ok) {
           throw new Error('Misslyckades med att skapa bokning');
@@ -121,10 +109,16 @@ function App() {
         // ----------
         setSelectedShow(updatedShow);
 
-        
-        setBookingMessage(`Bokningen lyckades! Email: ${bookingData.email}, Tider: ${new Date(updatedShow.startTime).toLocaleString()} - ${new Date(updatedShow.endTime).toLocaleString()}, Totalt pris: ${bookingData.totalPrice} kr.`);
+
+        const message = `Bokningen lyckades! Email: ${bookingData.email}, Tider: ${new Date(updatedShow.startTime).toLocaleString()} - ${new Date(updatedShow.endTime).toLocaleString()}, Totalt pris: ${bookingData.totalPrice} kr.`;
+        setBookingMessage(message);
+        console.log("Booking message:", message);
+
+
         // stäng modalen om du vill
-        closeModal();
+        setTimeout(() => {
+          closeModal();
+        }, 500); // Vänta 500ms innan stängning
       })
       .catch(error => {
         console.error('Fel vid bokning:', error);
@@ -150,6 +144,7 @@ function App() {
 
   // funktion - stänga modalen
   const closeModal = () => {
+    console.log("closeModal called"); // logg för felsökning
     setIsModalOpen(false);
     setSelectedShows([]); // rensa valda shows när modalen stängs
     setSelectedShow(null); // rensa vald show

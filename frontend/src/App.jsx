@@ -57,7 +57,7 @@ function App() {
 
   // hämta alla shows för en specifik film
   const getShowsForMovie = (movieId) => {
-    return shows.filter(show => show.movie._id === movieId);
+    return shows.filter(show => show.movie && show.movie._id === movieId); // lägg till kontroll för null
   };
 
   // hantera bokningsdata

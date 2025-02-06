@@ -2,7 +2,7 @@ import React from 'react';
 import './Modal.css';
 
 const Modal = ({ show, onClose, children, onSubmit }) => {
-  console.log("Modal visibility (inside Modal.jsx):", show);
+  // console.log("Modal visibility (inside Modal.jsx):", show);
 
   if (!show) {
     return null; // Om show är falskt, rendera ingenting

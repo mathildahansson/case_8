@@ -3,8 +3,8 @@ import './BookingForm.css';
 
 
 // Hämta backend URL från miljövariabeln
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
-console.log("Backend URL: ", backendUrl); // Lägg till denna rad för att debugga
+const backendUrl = import.meta.env.VITE_BACKEND_URL;  // Här används import.meta.env istället för process.env
+
 
 
 function BookingForm({ bookings, selectedShow, onSubmit }) {

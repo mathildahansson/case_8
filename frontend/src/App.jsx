@@ -8,8 +8,8 @@ import Footer from './assets/components/Footer';
 import './App.css';
 
 
-  // Använd den miljövariabeln för att dynamiskt sätta backend-URL:en:
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // // Använd den miljövariabeln för att dynamiskt sätta backend-URL:en:
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   console.log('Backend URL:', backendUrl); // Lägg till denna rad för att debugga
 
 

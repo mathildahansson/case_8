@@ -7,10 +7,10 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const movies = await Movie.find();
-    res.status(200).json(movies);
+    res.json(movies);
   } catch (error) {
-    console.error('Fel vid fetch av film:', error.message);
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching movies:", error);
+    res.status(500).json({ message: "Failed to fetch movies" });
   }
 });
 
@@ -33,7 +33,14 @@ router.get('/:id', async (req, res) => {
     if (!movie) {
       return res.status(404).json({ error: 'Film hittades inte' });
     }
-    res.status(200).json(movie);
+
+    // Omvandla releaseDate till ISO-sträng format
+    const formattedMovie = {
+      ...movie.toObject(),
+      releaseDate: movie.releaseDate ? movie.releaseDate.toISOString() : null,
+    };
+
+    res.status(200).json(formattedMovie);
   } catch (error) {
     console.error('Fel vid fetch av film (id):', error.message);
     res.status(400).json({ error: error.message });

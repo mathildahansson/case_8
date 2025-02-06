@@ -1,240 +1,120 @@
 import { useState, useEffect } from 'react';
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// import components
 import MovieContainer from './assets/components/MovieContainer';
 import ShowCard from './assets/components/ShowCard';
 import Modal from './assets/components/Modal';
 import BookingForm from './assets/components/BookingForm';
 import Header from './assets/components/Header';
 import Footer from './assets/components/Footer';
-// import MovieCard from './assets/components/MovieCard';
+import './App.css';
 
-// import CSS
-import './App.css'
+
+  // Använd den miljövariabeln för att dynamiskt sätta backend-URL:en:
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  console.log('Backend URL:', backendUrl); // Lägg till denna rad för att debugga
+
+
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
-  const [bookings, setBookings] = useState([]); // lägger till state för bokningar
-  const [isModalOpen, setIsModalOpen] = useState(false); // hanterar modalens synlighet
-  const [selectedShows, setSelectedShows] = useState([]); // hanterar vilken "show" som är vald för bokning
-  const [bookingMessage, setBookingMessage] = useState(''); // state för bokningsmeddelande
-  const [selectedShow, setSelectedShow] = useState(null); // state för vald show
+  const [bookings, setBookings] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedShows, setSelectedShows] = useState([]);
+  const [bookingMessage, setBookingMessage] = useState('');
+  const [selectedShow, setSelectedShow] = useState(null);
 
 
-  // fetch - movies
+
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/movies')
+    fetch(`${backendUrl}/api/v1/movies`)
       .then(response => response.json())
-      .then(data => {
-        console.log(data); // logga data för att se om en film har ett unikt id
-        setMovies(data);
-      })
-      .catch(error => {
-        console.error('Fel vid hämtning av filmer:', error);
-      });
-  }, []);
+      .then(data => setMovies(data))
+      .catch(error => console.error('Fel vid hämtning av filmer:', error));
+  }, [backendUrl]);
 
-  // fetch - shows
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/shows')
+    fetch(`${backendUrl}/api/v1/shows`)
       .then(response => response.json())
-      .then(data => {
-        console.log('Shows:', data); // logga shows
-        setShows(data);
-      })
-      .catch(error => {
-        console.error('Fel vid hämtning av bookings:', error);
-      });
-  }, []);
+      .then(data => setShows(data))
+      .catch(error => console.error('Fel vid hämtning av shows:', error));
+  }, [backendUrl]);
 
-
-  // gruppera visningar per film
-  const getShowCountForMovie = (movieId) => {
-    return shows.filter(show => show.movie._id === movieId).length;
-  };
-
-  // hämta alla shows för en specifik film
   const getShowsForMovie = (movieId) => {
-    return shows.filter(show => show.movie && show.movie._id === movieId); // lägg till kontroll för null
+    return shows.filter(show => show.movie._id === movieId);
   };
 
-  // hantera bokningsdata
-  const handleBookingSubmit = (bookingData) => {
-    if (!selectedShow) {
-      alert("Välj en föreställning först.");
-      return;
-    }
-
-    fetch('http://localhost:3000/api/v1/bookings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({
-        email: bookingData.email,
-        seats: bookingData.seats,
-        show: selectedShow._id, // skicka bara show-ID
-        totalPrice: bookingData.totalPrice,
-        bookingTime: bookingData.bookingTime,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Misslyckades med att skapa bokning');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Bokningen lyckades:', data);
-        setBookings(prevBookings => [...prevBookings, data]);
-
-
-        // uppdatera 'selectedShow' för att återspegla nya bokade platser
-        const updatedShow = {
-          ...selectedShow,
-          availableSeats: selectedShow.availableSeats.filter(
-            (seat) => !bookingData.seats.includes(seat)
-          ),
-          bookedSeats: [...selectedShow.bookedSeats, ...bookingData.seats],
-        };
-        // ---------
-        // const updatedShow = {
-        //   ...selectedShow,
-        //   availableSeats: selectedShow.availableSeats.filter(seat => !bookingData.seats.includes(seat)),
-        //   bookedSeats: [...selectedShow.bookedSeats, ...bookingData.seats],
-        // };
-        // ----------
-        setSelectedShow(updatedShow);
-
-
-        const message = `Bokningen lyckades! Email: ${bookingData.email}, Tider: ${new Date(updatedShow.startTime).toLocaleString()} - ${new Date(updatedShow.endTime).toLocaleString()}, Totalt pris: ${bookingData.totalPrice} kr.`;
-        setBookingMessage(message);
-        console.log("Booking message:", message);
-
-
-        // stäng modalen om du vill
-        setTimeout(() => {
-          closeModal();
-        }, 500); // Vänta 500ms innan stängning
-      })
-      .catch(error => {
-        console.error('Fel vid bokning:', error);
-        alert("Ett fel inträffade vid bokningen. Försök igen.");
-
-      });
+  const handleBookingSuccess = (message) => {
+    setBookingMessage(message); // Uppdatera bokningsmeddelandet
   };
 
-
-  // funktion för att hantera val av föreställning
-  const handleShowSelect = (show) => {
-    setSelectedShow(show); // uppdatera med den valda föreställningen
-  };
-
-  // funktion - öppna modalen och visa alla shows för en film
   const openModal = (movieId) => {
-    const showsForMovie = getShowsForMovie(movieId); // hämta alla shows för filmen
-
-    // säkerställer att inte openmodal crashar vid retur av tom array
-    if (showsForMovie.length === 0) {
-      console.error(`Inga föreställningar hittades för film med ID: ${movieId}`);
-      return;
-    }
-
-    setSelectedShows(showsForMovie); // spara dem i state
-    setSelectedShow(null); // rensa tidigare vald show
+    const showsForMovie = getShowsForMovie(movieId);
+    setSelectedShows(showsForMovie);
     setIsModalOpen(true);
-    setBookingMessage(''); // rensa bokningsmeddelande när modalen öppnas
+    setSelectedShow(null);
   };
 
-  // funktion - stänga modalen
   const closeModal = () => {
-    console.log("closeModal called"); // logg för felsökning
     setIsModalOpen(false);
-    setSelectedShows([]); // rensa valda shows när modalen stängs
-    setSelectedShow(null); // rensa vald show
+    setSelectedShows([]);
+    setSelectedShow(null);
+    setBookingMessage(''); // Rensa bokningsmeddelandet när modalen stängs
   };
-
 
   return (
     <>
-      {/* hanterar olika sidor - pages
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<App />}></Route>
-        </Routes>
-      </BrowserRouter> */}
-
-      {/* header */}
       <Header />
-
-      {/* visa bokningsmeddelandet om det finns */}
       {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
 
-
-      {/* visa alla movies från api */}
       <MovieContainer movies={movies} openModal={openModal} />
 
-
-      {/* modal för att visa bokningsinformation */}
       <Modal show={isModalOpen} onClose={closeModal}>
-        {selectedShows.length > 0 && (
-          <div className='show-card'>
-
-            {/* filminformation och bild */}
-            <div className='show-card-info'>
-              <ShowCard
-                movie={selectedShows[0].movie}
-                releaseDate={selectedShows[0].movie.releaseDate}
-                posterUrl={selectedShows[0].movie.posterUrl}
-                genre={selectedShows[0].movie.genre}
-                description={selectedShows[0].movie.description}
-              />
-            </div>
-
-            {/* info som tabell och show-spec */}
+        {selectedShows.length > 0 && selectedShows.map(show => (
+          <div key={show._id} className='show-card'>
+            <ShowCard movie={show.movie} />
+            
+            {/* Här är detaljerna om showen i en 'details'-tagg */}
             <div className="show-card-info">
-              <h3 id='show-h3'>Föreställningar för: {selectedShows[0].movie.title}</h3>
+              <h3>Föreställning för: {show.movie.title}</h3>
 
-              {selectedShows.map(show => (
-                <div key={show._id} className='show-spec'>
-                  <details>
-                    <summary onClick={() => handleShowSelect(show)}>
-                      {new Date(show.startTime).toLocaleDateString('sv-SE', {
-                        weekday: 'long',
-                        day: 'numeric',
-                        month: 'long',
-                      }).toUpperCase()},{' kl. '}
-                      {new Date(show.startTime).toLocaleTimeString('sv-SE', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      }).toUpperCase()}
-                    </summary>
-                    <br />
-                    <p><strong>Starttid:</strong> {new Date(show.startTime).toLocaleString()}</p>
-                    <p><strong>Sluttid:</strong> {new Date(show.endTime).toLocaleString()}</p>
-                    <p><strong>Salong:</strong> {show.roomNumber}</p>
-                    <p><strong>Pris:</strong> {show.pricePerSeat} kr</p>
-                    <p><strong>Lediga platser:</strong> {show.availableSeats.join(', ')}</p>
-                    <p><strong>Bokade platser:</strong> {show.bookedSeats.join(', ')}</p>
+              {/* Details för varje show */}
+              <details>
+                <summary>
+                  {new Date(show.startTime).toLocaleDateString('sv-SE', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                  }).toUpperCase()},{' kl. '}
+                  {new Date(show.startTime).toLocaleTimeString('sv-SE', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }).toUpperCase()}
+                </summary>
 
-                    <BookingForm
-                      bookings={bookings}
-                      selectedShow={show} // skicka varje show individuellt
-                      onSubmit={handleBookingSubmit} // använd den redan definierade funktionen här
-                    />
-                  </details>
-                </div>
-              ))}
+                {/* Placera alla platsrelaterade detaljer här */}
+                <p><strong>Starttid:</strong> {new Date(show.startTime).toLocaleString()}</p>
+                <p><strong>Sluttid:</strong> {new Date(show.endTime).toLocaleString()}</p>
+                <p><strong>Salong:</strong> {show.roomNumber}</p>
+                <p><strong>Pris per plats:</strong> {show.pricePerSeat} kr</p>
+                
+                {/* Lediga platser */}
+                <p><strong>Lediga platser:</strong> {show.availableSeats.join(', ')}</p>
+
+                {/* Bokade platser */}
+                <p><strong>Bokade platser:</strong> {show.bookedSeats.join(', ')}</p>
+
+                {/* Bokningsformuläret som ska visas för denna specifika show */}
+                <BookingForm
+                  selectedShow={show}
+                  bookings={bookings}
+                  onBookingSuccess={handleBookingSuccess}
+                />
+              </details>
             </div>
           </div>
-        )}
+        ))}
       </Modal>
 
-
-      {/* footer */}
       <Footer />
     </>
   );

@@ -1,145 +1,129 @@
 import { useState, useEffect } from 'react';
 import './BookingForm.css';
 
+
+// Hämta backend URL från miljövariabeln
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
+console.log("Backend URL: ", backendUrl); // Lägg till denna rad för att debugga
+
+
 function BookingForm({ bookings, selectedShow, onSubmit }) {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [selectedSeats, setSelectedSeats] = useState([]);
-    const [availableSeats, setAvailableSeats] = useState(selectedShow.availableSeats || []);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [availableSeats, setAvailableSeats] = useState(selectedShow?.availableSeats || []);
 
-    useEffect(() => {
-        // uppdatera tillgängliga platser om selectedShow ändras
-        setAvailableSeats(selectedShow.availableSeats || []);
-    }, [selectedShow]);
+  useEffect(() => {
+    // Uppdatera tillgängliga platser om selectedShow ändras
+    if (selectedShow?.availableSeats) {
+      setAvailableSeats(selectedShow.availableSeats);
+    }
+  }, [selectedShow]);
 
-    console.log(selectedShow); // logga för felsök
+  if (!selectedShow || !Array.isArray(selectedShow.availableSeats) || selectedShow.availableSeats.length === 0) {
+    return <p>Inga platser tillgängliga för denna föreställning.</p>;
+  }
 
+  const handleSeatChange = (seat) => {
+    setSelectedSeats((prevSelected) => {
+      const updatedSeats = prevSelected.includes(seat)
+        ? prevSelected.filter((s) => s !== seat)
+        : [...prevSelected, seat];
+      return updatedSeats;
+    });
+  };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    const handleSeatChange = (seat) => {
-        setSelectedSeats((prevSelected) => {
-            const updatedSeats = prevSelected.includes(seat)
-                ? prevSelected.filter((s) => s !== seat)
-                : [...prevSelected, seat];
-            console.log('Uppdaterade platser:', updatedSeats); // logga uppdateringen
-            return updatedSeats;
-        });
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (selectedSeats.length === 0) {
-            alert('Vänligen välj minst en plats.'); // meddelande om inga platser valda
-            return;
-        }
-
-
-
-        const bookingData = {
-            name,
-            email,
-            show: {
-                _id: selectedShow._id, // skicka hela show-objektet för att få mer information
-                startTime: selectedShow.startTime,
-                endTime: selectedShow.endTime,
-                pricePerSeat: selectedShow.pricePerSeat,
-                roomNumber: selectedShow.roomNumber,
-            },
-            seats: selectedSeats,
-            bookingTime: new Date().toLocaleString(),
-            totalPrice: selectedSeats.length * selectedShow.pricePerSeat,
-        };
-
-        try {
-            console.log('Skickar bokningsdata:', bookingData);
-
-            const response = await fetch('http://localhost:3000/api/v1/bookings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(bookingData),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Fel vid bokning: ${response.statusText}`);
-            }
-
-            const data = await response.json();
-
-            // spara token som returneras av backend
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                console.log('Token sparad:', data.token);
-            }
-
-            // alert('Bokning lyckades!');
-            setAvailableSeats((prevSeats) => prevSeats.filter((seat) => !selectedSeats.includes(seat))); // ta bort bokade platser
-            setName('');
-            setEmail('');
-            setSelectedSeats([]);
-            console.log('Bokningsresultat:', data);
-        } catch (error) {
-            console.error('Kunde inte skicka bokningen:', error);
-            alert('Något gick fel, vänligen försök igen.');
-        }
-        // onSubmit(bookingData); // skicka bokningsdata till föräldern
-    };
-
-    // kontrollera om selectedShow finns och har tillgängliga platser
-    if (!selectedShow || !Array.isArray(selectedShow.availableSeats) || selectedShow.availableSeats.length === 0) {
-        return <p>Inga platser tillgängliga för denna föreställning.</p>;
+    if (selectedSeats.length === 0) {
+      alert('Vänligen välj minst en plats.'); // Meddelande om inga platser valda
+      return;
     }
 
-    // beräkna totalpris med säkerhetskontroll
-    const totalPrice = selectedSeats.length * (selectedShow.pricePerSeat || 0);
+    const bookingData = {
+      name,
+      email,
+      show: selectedShow._id, // Skicka endast ID till API:t
+      seats: selectedSeats,
+      bookingTime: new Date().toLocaleString(),
+      totalPrice: selectedSeats.length * selectedShow.pricePerSeat,
+    };
 
-    return (
-        <form onSubmit={handleSubmit}>
+    try {
+      const response = await fetch(`${backendUrl}/api/v1/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
 
-            <label>
-                Namn:
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-            </label>
+      if (!response.ok) {
+        throw new Error(`Fel vid bokning: ${response.statusText}`);
+      }
 
-            <label>
-                E-post:
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </label>
+      const data = await response.json();
 
-            <div>
-                <p><strong>Välj platser:</strong></p>
-                {availableSeats.map((seat) => (
-                    <label key={seat} className="seat-option">
-                        <input
-                            type="checkbox"
-                            checked={selectedSeats.includes(seat)}
-                            onChange={() => handleSeatChange(seat)}
-                        />
-                        {seat}
-                    </label>
-                ))}
+      // Uppdatera platser efter bokning
+      setAvailableSeats((prevSeats) => prevSeats.filter((seat) => !selectedSeats.includes(seat)));
+      setName('');
+      setEmail('');
+      setSelectedSeats([]);
 
-            </div>
+      // Anropa onSubmit för att meddela föräldern om lyckad bokning
+      if (onSubmit) {
+        onSubmit(data);
+      }
+    } catch (error) {
+      console.error('Kunde inte skicka bokningen:', error);
+      alert('Något gick fel, vänligen försök igen.');
+    }
+  };
 
+  const totalPrice = selectedSeats.length * (selectedShow.pricePerSeat || 0);
 
-            {/* totalprisberäkning och visning */}
-            <p><strong>Totalpris:</strong> {totalPrice} kr</p>
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Namn:
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </label>
 
+      <label>
+        E-post:
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </label>
 
-            <button type="submit">Boka</button>
-        </form>
-    );
+      <div>
+        <p><strong>Välj platser:</strong></p>
+        {availableSeats.map((seat) => (
+          <label key={seat} className="seat-option">
+            <input
+              type="checkbox"
+              checked={selectedSeats.includes(seat)}
+              onChange={() => handleSeatChange(seat)}
+            />
+            {seat}
+          </label>
+        ))}
+      </div>
+
+      <p><strong>Totalpris:</strong> {totalPrice} kr</p>
+
+      <button type="submit">Boka</button>
+    </form>
+  );
 }
 
 export default BookingForm;

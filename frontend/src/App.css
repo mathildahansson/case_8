@@ -89,7 +89,7 @@ summary {
 }
 
 /* BOKNINGSBEKRÄFTELSE */
-.booking-message {
+/* .booking-message {
   margin: 20px 0;
   padding: 10px;
   background-color: #acc19e;
@@ -97,4 +97,17 @@ summary {
   border-radius: 7px;
   color: #333;
 }
+ */
 
+
+ .booking-message {
+  background-color: #4caf50; /* grön bakgrund */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-size: 16px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}

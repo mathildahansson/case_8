@@ -8,9 +8,9 @@ import Footer from './assets/components/Footer';
 import './App.css';
 
 
-  // // Använd den miljövariabeln för att dynamiskt sätta backend-URL:en:
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  console.log('Backend URL:', backendUrl); // Lägg till denna rad för att debugga
+// // Använd den miljövariabeln för att dynamiskt sätta backend-URL:en:
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+console.log('Backend URL:', backendUrl); // Lägg till denna rad för att debugga
 
 
 
@@ -22,6 +22,8 @@ function App() {
   const [selectedShows, setSelectedShows] = useState([]);
   const [bookingMessage, setBookingMessage] = useState('');
   const [selectedShow, setSelectedShow] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState(null);  // För att lagra den valda filmen
+
 
 
 
@@ -48,7 +50,10 @@ function App() {
   };
 
   const openModal = (movieId) => {
+    const movie = movies.find(movie => movie._id === movieId);
     const showsForMovie = getShowsForMovie(movieId);
+
+    setSelectedMovie(movie);
     setSelectedShows(showsForMovie);
     setIsModalOpen(true);
     setSelectedShow(null);
@@ -69,13 +74,20 @@ function App() {
       <MovieContainer movies={movies} openModal={openModal} />
 
       <Modal show={isModalOpen} onClose={closeModal}>
+
+        {/* Visa filmens information en gång */}
+        {selectedMovie && <ShowCard movie={selectedMovie} />}
+
+        {/* Visa föreställningarna */}
         {selectedShows.length > 0 && selectedShows.map(show => (
-          <div key={show._id} className='show-card'>
-            <ShowCard movie={show.movie} />
-            
+          <div key={show._id} className="show-card">
+
+            {/* <h3>Föreställning för: {show.movie.title}</h3> */}
+
+
             {/* Här är detaljerna om showen i en 'details'-tagg */}
             <div className="show-card-info">
-              <h3>Föreställning för: {show.movie.title}</h3>
+              {/* <h3>Föreställning för: {show.movie.title}</h3> */}
 
               {/* Details för varje show */}
               <details>
@@ -96,7 +108,7 @@ function App() {
                 <p><strong>Sluttid:</strong> {new Date(show.endTime).toLocaleString()}</p>
                 <p><strong>Salong:</strong> {show.roomNumber}</p>
                 <p><strong>Pris per plats:</strong> {show.pricePerSeat} kr</p>
-                
+
                 {/* Lediga platser */}
                 <p><strong>Lediga platser:</strong> {show.availableSeats.join(', ')}</p>
 

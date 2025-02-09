@@ -5,7 +5,7 @@ const Modal = ({ show, onClose, children, onSubmit }) => {
   // console.log("Modal visibility (inside Modal.jsx):", show);
 
   if (!show) {
-    return null; // Om show är falskt, rendera ingenting
+    return null; // om show är falskt, rendera ingenting
   }
 
   return (
@@ -14,15 +14,15 @@ const Modal = ({ show, onClose, children, onSubmit }) => {
         <button 
           onClick={() => {
             console.log("Closing modal");
-            onClose();  // Stänger modalen
+            onClose();  // stänger modalen
           }} 
           className="close-button">
           &times;
         </button>
         
-        {/* Skicka onSubmit som prop till varje barnkomponent */}
+        {/* skicka onSubmit som prop till varje barnkomponent */}
         {React.Children.map(children, child => 
-          React.cloneElement(child, { onSubmit }) // Skickar onSubmit till alla barn
+          React.cloneElement(child, { onSubmit }) // skickar onSubmit till alla barn
         )}
       </div>
     </div>

@@ -1,0 +1,30 @@
+.movie-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+}
+
+.movie-card {
+    background-color: #ffffff;
+    padding: 0rem;
+    max-width: fit-content;
+}
+
+.movies-list {
+    max-width: 100%;
+    margin: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+h2 {
+    background: linear-gradient(to right, #e4d46a, #998d7c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    font-size: 32px;
+    text-transform: none;
+    text-align: center;
+}

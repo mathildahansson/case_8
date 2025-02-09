@@ -1,13 +1,11 @@
-// import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
-// import Home from '/pages/Home';
-// import Login from '/pages/Login';
+import './Header.css';
 
 
 function Header() {
     return (
         <header>
             <h1>Goldies Cinema</h1>
-            <hr />
+            <hr className='hr-header' />
             <p id='head-description'>Välkommen till nostalgiernas biograf!</p>
         </header>
     )

@@ -3,7 +3,7 @@ import './Footer.css';
 function Footer() {
     return (
         <footer>
-            <h3>&copy; Mathilda Hansson 2024</h3>
+            <h3 id='footer'>&copy; Mathilda Hansson 2025</h3>
         </footer>
     )
 }

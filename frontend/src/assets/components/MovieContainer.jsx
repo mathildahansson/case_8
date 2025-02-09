@@ -1,10 +1,11 @@
-import MovieCard from './MovieCard';  // Se till att importera MovieCard här
+import MovieCard from './MovieCard'; 
 import './MovieCard.css';
+import './MovieContainer.css';
 
 function MovieContainer({ movies, openModal, backendUrl }) {
     return (
         <div className="movie-container">
-            <h2 id="movies">Aktuella filmer:</h2>
+            <h2>Aktuella filmer:</h2>
             <div className="movies-list">
                 {movies.map(movie => (
                     <MovieCard

@@ -1,8 +1,7 @@
 import './MovieCard.css';
 
-
 function MovieCard({ title, posterUrl, onBook }) {
-  // console.log("Poster URL:", posterUrl); // Debugging
+  // console.log("Poster URL:", posterUrl); // debugging
   return (
     <div className="movie-card">
 
@@ -16,9 +15,7 @@ function MovieCard({ title, posterUrl, onBook }) {
           <button onClick={onBook} className='btn-book'>Boka</button> {/* onClick för att öppna modalen */}
         </div>
       </div>
-
     </div>
-
   );
 }
 

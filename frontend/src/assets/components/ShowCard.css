@@ -4,7 +4,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.5rem;
   min-height: 600px;
 }
 
@@ -18,7 +18,6 @@
 @media screen and (max-width: 768px) {
   .show-card {
     flex-direction: column;
-    /* align-items: center; */
     min-height: auto;
   }
 
@@ -26,7 +25,6 @@
     width: 100%;
     height: auto;
   }
-
 
   summary {
     padding: 0.5rem;

@@ -31,6 +31,10 @@
     align-items: center;
     justify-content: center;
   }
+
+  summary {
+    padding: 0.5rem;
+  }
 }
 
 h3#movie-title {

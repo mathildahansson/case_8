@@ -23,98 +23,94 @@ function ShowCard({ movie, shows, onBookingSuccess, bookings }) {
         // "wrapper" för show-card
         <div className="show-card">
 
-            <div className="poster-description">
-                <div className="show-card-img">
-                    <img src={posterUrl} alt={title} className="show-poster" />
+            <img src={posterUrl} alt={title} className="show-poster" />
+
+            {/* filminformation: */}
+            <div className="movie-info">
+
+                {/* filmtitel */}
+                <h3 id='movie-title'>{title}</h3>
+
+                {/* specifik filminformation */}
+                <div className="movie-spec-div">
+                    {/* genre */}
+                    <p className="movie-spec">
+                        {genre}
+                    </p>
+                    {/* duration */}
+                    <p className="movie-spec">
+                        {duration} min
+                    </p>
+                    {/* director */}
+                    <p className="movie-spec">
+                        Regissör: {director}
+                    </p>
                 </div>
 
-                {/* filminformation: */}
-                <div className="movie-info">
+                <hr className='hr-movie' />
 
-                    {/* filmtitel */}
-                    <h3 id='movie-title'>{title}</h3>
+                {/* filmbeskrivning */}
+                <p>{description}</p>
 
-                    {/* specifik filminformation */}
-                    <div className="movie-spec-div">
-                        {/* genre */}
-                        <p className="movie-spec">
-                            {genre}
-                        </p>
-                        {/* duration */}
-                        <p className="movie-spec">
-                            {duration} min
-                        </p>
-                        {/* director */}
-                        <p className="movie-spec">
-                            Regissör: {director}
-                        </p>
-                    </div>
+                {/* shows-div för bokning */}
+                <div className="shows-to-book">
+                    {/* föreställningar visas här */}
+                    {shows.length > 0 && (
+                        <div className="show-details">
+                            {shows.map(show => (
+                                <details
+                                    key={show._id}
+                                    className="show-item"
+                                    onToggle={(e) => {
+                                        if (e.target.open) {
+                                            setSelectedShow(show); // sätt föreställningen när <details> öppnas
+                                        } else {
+                                            setSelectedShow(null); // nollställ om det stängs
+                                        }
+                                    }}
+                                >
+                                    <summary>
+                                        {new Date(show.startTime).toLocaleDateString('sv-SE', {
+                                            weekday: 'long',
+                                            day: 'numeric',
+                                            month: 'long',
+                                        }).toUpperCase()},{' kl. '}
+                                        {new Date(show.startTime).toLocaleTimeString('sv-SE', {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        }).toUpperCase()}
+                                    </summary>
 
-                    <hr className='hr-movie' />
+                                    {/* föreställningsinformation */}
+                                    <div className="show-spec">
+                                        <span><strong>Starttid:</strong> {new Date(show.startTime).toLocaleTimeString('sv-SE', {
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}</span>
+                                        <span><strong>Salong:</strong> {show.roomNumber}</span>
+                                        <span><strong>Pris per plats:</strong> {show.pricePerSeat} kr</span>
+                                    </div>
 
-                    {/* filmbeskrivning */}
-                    <p>{description}</p>
-
-
-                    {/* shows-div för bokning */}
-                    <div className="shows-to-book">
-                        {/* föreställningar visas här */}
-                        {shows.length > 0 && (
-                            <div className="show-details">
-                                {shows.map(show => (
-                                    <details
-                                        key={show._id}
-                                        className="show-item"
-                                        onToggle={(e) => {
-                                            if (e.target.open) {
-                                                setSelectedShow(show); // sätt föreställningen när <details> öppnas
-                                            } else {
-                                                setSelectedShow(null); // nollställ om det stängs
-                                            }
-                                        }}
-                                    >
-                                        <summary>
-                                            {new Date(show.startTime).toLocaleDateString('sv-SE', {
-                                                weekday: 'long',
-                                                day: 'numeric',
-                                                month: 'long',
-                                            }).toUpperCase()},{' kl. '}
-                                            {new Date(show.startTime).toLocaleTimeString('sv-SE', {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            }).toUpperCase()}
-                                        </summary>
-
-                                        {/* föreställningsinformation */}
-                                        <div className="show-spec">
-                                            <span><strong>Starttid:</strong> {new Date(show.startTime).toLocaleTimeString('sv-SE', {
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            })}</span>
-                                            <span><strong>Salong:</strong> {show.roomNumber}</span>
-                                            <span><strong>Pris per plats:</strong> {show.pricePerSeat} kr</span>
-                                        </div>
-
-                                        {/* använd den valda föreställningen */}
-                                        {selectedShow && selectedShow._id === show._id && (
-                                            <>
-                                                <BookingForm
-                                                    bookings={bookings}
-                                                    selectedShow={selectedShow}
-                                                    onSubmit={(message, bookingInfo) => {
-                                                        onBookingSuccess(message, bookingInfo); // skicka bokningsmeddelandet och info till App.jsx
-                                                    }}
-                                                />
-                                            </>
-                                        )}
-                                    </details>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                                    {/* använd den valda föreställningen */}
+                                    {selectedShow && selectedShow._id === show._id && (
+                                        <>
+                                            <BookingForm
+                                                bookings={bookings}
+                                                selectedShow={selectedShow}
+                                                onSubmit={(message, bookingInfo) => {
+                                                    onBookingSuccess(message, bookingInfo); // skicka bokningsmeddelandet och info till App.jsx
+                                                }}
+                                            />
+                                        </>
+                                    )}
+                                </details>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
+        // </div>
     );
 }
 

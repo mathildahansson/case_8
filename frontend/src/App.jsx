@@ -35,8 +35,17 @@ function App() {
       .catch(error => console.error('Fel vid hämtning av shows:', error));
   }, [backendUrl]);
 
+  // const getShowsForMovie = (movieId) => {
+  //   return shows.filter(show => show.movie._id === movieId);
+  // };
+
   const getShowsForMovie = (movieId) => {
-    return shows.filter(show => show.movie._id === movieId);
+    return shows
+      .filter(show => show.movie._id === movieId)
+      .map(show => ({
+        ...show, // behåll alla befintliga egenskaper i show
+        movieTitle: show.movie.title, // lägg till movieTitle
+      }));
   };
 
   const handleBookingSuccess = (message, bookingInfo) => {
@@ -88,25 +97,25 @@ function App() {
   return (
     <>
 
-        {/* bokningsmeddelande */}
-        {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
+      {/* bokningsmeddelande */}
+      {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
 
-        <Header />
+      <Header />
 
-        <MovieContainer movies={movies} openModal={openModal} />
+      <MovieContainer movies={movies} openModal={openModal} />
 
-        <Modal show={isModalOpen} onClose={closeModal}>
-          {selectedMovie && (
-            <ShowCard
-              movie={selectedMovie}
-              shows={selectedShows}
-              onBookingSuccess={handleBookingSuccess}
-              bookings={bookings}
-            />
-          )}
-        </Modal>
+      <Modal show={isModalOpen} onClose={closeModal}>
+        {selectedMovie && (
+          <ShowCard
+            movie={selectedMovie}
+            shows={selectedShows}
+            onBookingSuccess={handleBookingSuccess}
+            bookings={bookings}
+          />
+        )}
+      </Modal>
 
-        <Footer />
+      <Footer />
     </>
   );
 }

@@ -84,12 +84,12 @@ function ShowCard({ movie, shows, onBookingSuccess, bookings }) {
                                     <div className="detail-content">
                                         {/* föreställningsinformation */}
                                         <div className="show-spec">
-                                            <span><strong>Starttid:</strong> {new Date(show.startTime).toLocaleTimeString('sv-SE', {
+                                            <span><strong>Tid:</strong> {new Date(show.startTime).toLocaleTimeString('sv-SE', {
                                                 hour: '2-digit',
                                                 minute: '2-digit'
                                             })}</span>
                                             <span><strong>Salong:</strong> {show.roomNumber}</span>
-                                            <span><strong>Pris per plats:</strong> {show.pricePerSeat} kr</span>
+                                            <span><strong>Biljettpris:</strong> {show.pricePerSeat} kr</span>
                                         </div>
 
                                         {/* använd den valda föreställningen */}

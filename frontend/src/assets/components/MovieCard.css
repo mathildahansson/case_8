@@ -41,7 +41,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.8);
-  color: #f1f1f1;
+  color: var(--background-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -61,7 +61,7 @@
   border: none;
   border-radius: 7px;
   background: linear-gradient(to right, #e4d46a, #998d7c);
-  color: #f1f1f1;
+  color: var(--background-color);
   font-weight: 600;
   cursor: pointer;
 }

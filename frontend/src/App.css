@@ -1,11 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+/* ROOT - Globala färgvariabler */
+:root {
+  --primary-color: #1c1c1c;
+  --background-color: #f1f1f1;
+  --accent-color: #998d7c;
+  --secondary-accent: #b2ab7e;
+}
+
 /* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Roboto", serif;
+  color: var(--primary-color);
 }
 
 /* BODY */
@@ -16,7 +25,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-color: #ffffff;
+  background-color: var(--background-color);
 }
 
 /* TYPSNITT OCH STILAR */

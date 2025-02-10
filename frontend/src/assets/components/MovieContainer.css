@@ -4,7 +4,7 @@
 }
 
 .movie-card {
-    background-color: #ffffff;
+    background-color: var(--background-color);
     padding: 0rem;
     max-width: fit-content;
 }

@@ -81,28 +81,30 @@ function ShowCard({ movie, shows, onBookingSuccess, bookings }) {
                                         }).toUpperCase()}
                                     </summary>
 
-                                    {/* föreställningsinformation */}
-                                    <div className="show-spec">
-                                        <span><strong>Starttid:</strong> {new Date(show.startTime).toLocaleTimeString('sv-SE', {
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}</span>
-                                        <span><strong>Salong:</strong> {show.roomNumber}</span>
-                                        <span><strong>Pris per plats:</strong> {show.pricePerSeat} kr</span>
-                                    </div>
+                                    <div className="detail-content">
+                                        {/* föreställningsinformation */}
+                                        <div className="show-spec">
+                                            <span><strong>Starttid:</strong> {new Date(show.startTime).toLocaleTimeString('sv-SE', {
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}</span>
+                                            <span><strong>Salong:</strong> {show.roomNumber}</span>
+                                            <span><strong>Pris per plats:</strong> {show.pricePerSeat} kr</span>
+                                        </div>
 
-                                    {/* använd den valda föreställningen */}
-                                    {selectedShow && selectedShow._id === show._id && (
-                                        <>
-                                            <BookingForm
-                                                bookings={bookings}
-                                                selectedShow={selectedShow}
-                                                onSubmit={(message, bookingInfo) => {
-                                                    onBookingSuccess(message, bookingInfo); // skicka bokningsmeddelandet och info till App.jsx
-                                                }}
-                                            />
-                                        </>
-                                    )}
+                                        {/* använd den valda föreställningen */}
+                                        {selectedShow && selectedShow._id === show._id && (
+                                            <>
+                                                <BookingForm
+                                                    bookings={bookings}
+                                                    selectedShow={selectedShow}
+                                                    onSubmit={(message, bookingInfo) => {
+                                                        onBookingSuccess(message, bookingInfo); // skicka bokningsmeddelandet och info till App.jsx
+                                                    }}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
                                 </details>
                             ))}
                         </div>
@@ -110,7 +112,6 @@ function ShowCard({ movie, shows, onBookingSuccess, bookings }) {
                 </div>
             </div>
         </div>
-        // </div>
     );
 }
 

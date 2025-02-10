@@ -24,12 +24,15 @@
     gap: 0.5rem;
 }
 
-.film-screen {
+.film-screen p {
     width: 100%;
     background-color: #838383;
     margin-bottom: 10px;
     border-radius: 5px 5px 0px 0px;
     text-align: center;
+    text-transform: uppercase;
+    font-size: small;
+    color: var(--background-color);
     padding: 10px 0px;
 }
 
@@ -48,7 +51,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f1f1f1;
+    background-color: var(--background-color);
     border-radius: 4px 4px 12px 12px;
     cursor: pointer;
     box-sizing: border-box;
@@ -70,35 +73,40 @@
 }
 
 button {
-    margin-top: 20px;
+    margin-top: 0.5rem;
     padding: 10px 20px;
-    background-color: #998d7c;
-    color: white;
+    background: linear-gradient(to left, #b0a79a, #998d7c);
+    color: var(--background-color);
     border: none;
     cursor: pointer;
     border-radius: 5px;
 }
 
 button:hover {
-    background-color: #b2ab7e;
+    background: linear-gradient(to left, #b0a79a, #60564a);
 }
 
 .booking-inputs {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 1rem;
-    justify-content: space-between;
+    gap: 0.5rem;
     margin-top: 1rem;
 }
 
 label {
     display: flex;
+    font-weight: 600;
     gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
 }
 
 input {
-
+    width: 70%;
+    border: 2px solid var(--accent-color);
+    border-radius: 4px;
+    padding: 0.5rem;
 }
 
 .total-price {

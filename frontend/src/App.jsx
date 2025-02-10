@@ -87,25 +87,26 @@ function App() {
 
   return (
     <>
-      {/* bokningsmeddelande */}
-      {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
 
-      <Header />
+        {/* bokningsmeddelande */}
+        {bookingMessage && <p className="booking-message">{bookingMessage}</p>}
 
-      <MovieContainer movies={movies} openModal={openModal} />
+        <Header />
 
-      <Modal show={isModalOpen} onClose={closeModal}>
-        {selectedMovie && (
-          <ShowCard
-            movie={selectedMovie}
-            shows={selectedShows}
-            onBookingSuccess={handleBookingSuccess}
-            bookings={bookings}
-          />
-        )}
-      </Modal>
+        <MovieContainer movies={movies} openModal={openModal} />
 
-      <Footer />
+        <Modal show={isModalOpen} onClose={closeModal}>
+          {selectedMovie && (
+            <ShowCard
+              movie={selectedMovie}
+              shows={selectedShows}
+              onBookingSuccess={handleBookingSuccess}
+              bookings={bookings}
+            />
+          )}
+        </Modal>
+
+        <Footer />
     </>
   );
 }

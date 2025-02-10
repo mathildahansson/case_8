@@ -102,10 +102,11 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
 
       <p><strong>Välj platser:</strong></p>
       <div className="salong">
-        <div className="seat-container">
+        {/* <div className="seat-container"> */}
 
-          {/* film-screen*/}
-          <div className="film-screen"><p>Filmduk</p></div>
+        {/* film-screen*/}
+        <div className="film-screen"><p>Filmduk</p></div>
+        <div className="seat-container">
 
           {seatRows.map((row, rowIndex) => (
             <div key={rowIndex} className="seat-row">
@@ -123,33 +124,40 @@ function BookingForm({ bookings, selectedShow, onSubmit }) {
                     {seat}
                   </div>
                 );
+
               })}
+
             </div>
           ))}
         </div>
+
       </div>
 
-      <p><strong>Totalpris:</strong> {totalPrice} kr</p>
+      <p className='total-price'><strong>Totalpris:</strong> {totalPrice} kr</p>
 
-      <label>
-        Namn:
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </label>
+      <hr />
 
-      <label>
-        E-post:
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </label>
+      <div className="booking-inputs">
+        <label>
+          Namn:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          E-post:
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+      </div>
 
       <button type="submit">Boka</button>
     </form>
